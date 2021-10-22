@@ -55,11 +55,47 @@ namespace Kupac
             }
         }
 
+        private int Gyerekek(int szülő, out int gyerek1, out int gyerek2)
+        {
+            // emlékeztető
+            /*
+            int b;
+            bool lehete = int.TryParse("5", out b);
+            */
+
+            gyerek1 = 0;
+            gyerek2 = 0;
+            int gyerekszám = 0;
+            if (2 * szülő <= lista.Count)
+            {
+                gyerek1 = 2 * szülő;
+                gyerekszám = 1;
+                if (2 * szülő + 1 <= lista.Count)
+                {
+                    gyerek2 = 2 * szülő + 1;
+                    gyerekszám = 2;
+                }
+            }
+            return gyerekszám;
+        }
+
+        private void Süllyesztés()
+        {
+            int i = 1;
+
+       }
 
         public void Push(T elem)
         {
             lista.Add(elem);
             Bugyborékolj(lista.Count);
+        }
+
+        public T Pop() 
+        {
+            Csere(1, lista.Count);
+            lista.RemoveLast();
+            Süllyesztés();
         }
 
         public override string ToString() => lista.ToString();
