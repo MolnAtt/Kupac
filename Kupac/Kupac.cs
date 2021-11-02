@@ -79,11 +79,41 @@ namespace Kupac
             return gyerekszám;
         }
 
+        private bool Idősebbgyerek(int szülő, out int idősebb_gyerek)
+        {
+            int gyerek1;
+            int gyerek2;
+            int gyerekszám = Gyerekek(szülő, out gyerek1, out gyerek2);
+
+            switch (gyerekszám)
+            {
+                case 0:
+                    idősebb_gyerek = 0;
+                    return false;
+                case 1:
+                    idősebb_gyerek = gyerek1;
+                    return true;
+                case 2:
+                    idősebb_gyerek = relacio(lista[gyerek1], lista[gyerek2]) == -1 ? gyerek2 : gyerek1;
+                    return true;
+                default: // ide sose fog befutni a program
+                    idősebb_gyerek = 0;
+                    return true;
+            }
+        }
+
         private void Süllyesztés()
         {
-            int i = 1;
-
-       }
+            int szülő = 1;
+            int idősebb_gyerek;
+            bool vanegyerek = Idősebbgyerek(szülő, out idősebb_gyerek);
+            while (vanegyerek && relacio(lista[szülő], lista[idősebb_gyerek])==-1)
+            {
+                Csere(szülő, idősebb_gyerek);
+                szülő = idősebb_gyerek;
+                vanegyerek = Idősebbgyerek(szülő, out idősebb_gyerek);
+            }
+        }
 
         public void Push(T elem)
         {
@@ -94,10 +124,13 @@ namespace Kupac
         public T Pop() 
         {
             Csere(1, lista.Count);
+            T result = lista[lista.Count];
             lista.RemoveLast();
             Süllyesztés();
+            return result;
         }
 
+        public bool Empty() => lista.Count == 0;
         public override string ToString() => lista.ToString();
 
     }
